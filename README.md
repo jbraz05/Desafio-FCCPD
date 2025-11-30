@@ -48,16 +48,6 @@ docker run -d --name client --network minha-rede meu-client
 docker logs client
 ```
 
----
-
-## ◈ Critérios atendidos
-
-| **Critério**                        | **Como foi atendido**                    |
-| ----------------------------------- | ---------------------------------------- |
-| Configuração correta da rede docker | Criada rede `minha-rede` ✔               |
-| Comunicação funcional               | Client envia curl → webserver responde ✔ |
-| README claro                        | Passo a passo completo incluído ✔        |
-| Organização do projeto              | Pastas separadas + Scripts executáveis ✔ |
 </details>
 
 <details>
@@ -131,16 +121,6 @@ docker rm -f qualquercoisa 2>$null
 docker run --rm -v meuvolume:/data desafio2-sqlite
 ```
 
----
-
-## ◈ Critérios atendidos
-
-| **Critério**                        | **Como foi atendido**                                                         |
-| ----------------------------------- | ----------------------------------------------------------------------------- |
-| Uso correto de volumes              | Banco SQLite armazenado em volume Docker (`meuvolume`) ✔                      |
-| Comunicação funcional               | Dados permaneceram após remover e recriar containers ✔                        |
-| README claro                        | Passo a passo completo de criação, preenchimento e leitura do volume ✔        |
-| Organização do projeto              | Scripts separados em `/app`, Dockerfile simples e bem organizado ✔            |
 </details>
 
 <details>
@@ -190,16 +170,6 @@ http://localhost:8000
 - *Contador do Redis*
 - *Confirmação da comunicação entre os serviços*
 
----
-
-## ◈ Critérios atendidos
-
-| **Critério**                           | **Como foi atendido**                                         |
-| -------------------------------------- | ------------------------------------------------------------- |
-| Compose funcional e bem estruturado    | docker-compose.yml com 3 serviços, volumes, rede e configs ✔  |
-| Comunicação entre serviços funcionando | Web acessa Redis e PostgreSQL via DNS interno ✔               |
-| README com explicação da arquitetura   | Documentação completa e organizada no estilo dos desafios ✔   |
-| Clareza e boas práticas                | Códigos separados, init SQL, rede interna e env vars limpas ✔ |
 </details>
 
 <details>
@@ -274,16 +244,6 @@ curl http://localhost:5001/relatorio
   - `service_a`: `GET /users`, `GET /health`.
   - `service_b`: `GET /relatorio`, `GET /health`.
 
----
-
-## ◈ Critérios atendidos
-
-| **Critério**                                | **Como foi atendido**                                                  |
-| ------------------------------------------- | ---------------------------------------------------------------------- |
-| Comunicação entre microsserviços            | B consome A via HTTP (requisição para `http://service_a:5000/users`) ✔ |
-| Dockerfiles e isolamento corretos           | Cada serviço tem seu próprio Dockerfile e imagem independente ✔        |
-| Explicação clara da arquitetura e endpoints | README detalha serviços, endpoints e fluxo de comunicação ✔            |
-| Clareza e originalidade da implementação    | Relatório com frases em português usando dados do microsserviço A ✔    |
 </details>
 
 <details>
@@ -348,14 +308,4 @@ curl http://localhost:8000/users
 curl http://localhost:8000/orders
 ```
 
----
-
-## ◈ Critérios atendidos
-
-| **Critério**                      | **Como foi atendido**                                        |
-| --------------------------------- | ------------------------------------------------------------ |
-| Funcionamento do gateway          | Gateway expõe `/users` e `/orders` centralizando acesso ✔    |
-| Integração correta entre serviços | Gateway consulta users_service e orders_service via HTTP ✔   |
-| README detalhado                  | Explicação da arquitetura, endpoints e testes incluídos ✔    |
-| Clareza e boa organização         | Código separado por serviços, Dockerfiles limpos e Compose ✔ |
 </details>
