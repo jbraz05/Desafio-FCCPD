@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+  web:
+    build: ./web
+    container_name: web
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - cache
+    environment:
+      POSTGRES_DB: meu_banco
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: senha
+      POSTGRES_HOST: db
+      REDIS_HOST: cache
+    networks:
+      - minha-rede
+
+  db:
+    image: postgres:15
+    container_name: db
+    environment:
+      POSTGRES_DB: meu_banco
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: senha
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db-init:/docker-entrypoint-initdb.d
+    networks:
+      - minha-rede
+
+  cache:
+    image: redis:latest
+    container_name: cache
+    networks:
+      - minha-rede
+
+networks:
+  minha-rede:
+
+volumes:
+  pgdata:
