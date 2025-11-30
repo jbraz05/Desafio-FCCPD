@@ -58,8 +58,6 @@ docker logs client
 | Organização do projeto              | Pastas separadas + Scripts executáveis ✔ |
 </details>
 
----
-
 <details>
 <summary><h2>➋ Segundo Desafio: Volumes e Persistência</h2></summary>
 
@@ -141,4 +139,58 @@ docker run --rm -v meuvolume:/data desafio2-sqlite
 | Comunicação funcional               | Dados permaneceram após remover e recriar containers ✔                        |
 | README claro                        | Passo a passo completo de criação, preenchimento e leitura do volume ✔        |
 | Organização do projeto              | Scripts separados em `/app`, Dockerfile simples e bem organizado ✔            |
+</details>
+
+<details>
+<summary><h2>➌ Terceiro Desafio: Docker Compose Orquestrando Serviços</h2></summary>
+
+## ◈ Objetivo
+Orquestrar múltiplos serviços Docker usando Docker Compose, demonstrando comunicação interna, variáveis de ambiente e dependências.
+
+---
+
+## ◈ Componentes do Projeto
+
+### Web (Flask)
+- Expõe API na porta 8000.
+- Conecta ao Redis para contador de visitas.
+- Conecta ao PostgreSQL para ler mensagens.
+
+### Banco de Dados (ProstgreSQL)
+- Armazena tabela `mensagens`.
+- Possui script de inicialização automático em `db-init/init.sql`.
+
+### Cache (Redis)
+- Mantém o contador de acessos.
+- Comunicação rápida via rede interna.
+
+---
+
+## ◈ Como Executar
+
+### 1. Subir tudo:
+```bash
+docker compose up --build
+```
+
+### 2. Ver comunicação funcionando:
+*Acesse o link:*
+```bash
+http://localhost:8000
+```
+*O retorno inclui:*
+- *Mensagem do Postgres*
+- *Contador do Redis*
+- *Confirmação da comunicação entre os serviços*
+
+---
+
+## ◈ Critérios atendidos
+
+| **Critério**                           | **Como foi atendido**                                         |
+| -------------------------------------- | ------------------------------------------------------------- |
+| Compose funcional e bem estruturado    | docker-compose.yml com 3 serviços, volumes, rede e configs ✔  |
+| Comunicação entre serviços funcionando | Web acessa Redis e PostgreSQL via DNS interno ✔               |
+| README com explicação da arquitetura   | Documentação completa e organizada no estilo dos desafios ✔   |
+| Clareza e boas práticas                | Códigos separados, init SQL, rede interna e env vars limpas ✔ |
 </details>
