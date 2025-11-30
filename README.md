@@ -1,5 +1,5 @@
 <details>
-<summary><h2>➊ Primeiro Desafio: Containers em Rede</h2></summary>
+<summary><h2>⓵ Primeiro Desafio: Containers em Rede</h2></summary>
 
 ## ◈ Objetivo
 Criar dois containers Docker que se comunicam através de uma rede customizada.
@@ -59,7 +59,7 @@ docker logs client
 </details>
 
 <details>
-<summary><h2>➋ Segundo Desafio: Volumes e Persistência</h2></summary>
+<summary><h2>⓶ Segundo Desafio: Volumes e Persistência</h2></summary>
 
 ## ◈ Objetivo
 Demonstrar persistência de dados utilizando volumes Docker e um pequeno banco SQLite.
@@ -142,7 +142,7 @@ docker run --rm -v meuvolume:/data desafio2-sqlite
 </details>
 
 <details>
-<summary><h2>➌ Terceiro Desafio: Docker Compose Orquestrando Serviços</h2></summary>
+<summary><h2>⓷ Terceiro Desafio: Docker Compose Orquestrando Serviços</h2></summary>
 
 ## ◈ Objetivo
 Orquestrar múltiplos serviços Docker usando Docker Compose, demonstrando comunicação interna, variáveis de ambiente e dependências.
@@ -163,6 +163,11 @@ Orquestrar múltiplos serviços Docker usando Docker Compose, demonstrando comun
 ### Cache (Redis)
 - Mantém o contador de acessos.
 - Comunicação rápida via rede interna.
+
+### Rede e Dependências
+- Todos os serviços estão na rede interna `minha-rede.`
+- `depends_on` garante que db e cache iniciem antes do web.
+- Variáveis de ambiente configuram conexões de forma clara e isolada.
 
 ---
 
@@ -193,4 +198,90 @@ http://localhost:8000
 | Comunicação entre serviços funcionando | Web acessa Redis e PostgreSQL via DNS interno ✔               |
 | README com explicação da arquitetura   | Documentação completa e organizada no estilo dos desafios ✔   |
 | Clareza e boas práticas                | Códigos separados, init SQL, rede interna e env vars limpas ✔ |
+</details>
+
+<details>
+<summary><h2>⓸ Quarto Desafio: Microsserviços Independentes</h2></summary>
+
+## ◈ Objetivo
+Criar dois microsserviços independentes que se comunicam via HTTP, cada um com seu próprio Dockerfile, demonstrando uma arquitetura simples de microsserviços.
+
+---
+
+## ◈ Componentes do Projeto
+
+### Microsserviço A (service_a)
+- Exposto na porta interna 5000.
+- Endpoint principal: `GET /users`
+  - Retorna uma lista de usuários em JSON, com campos `id`, `nome` e `ativo_desde`.
+- Endpoint de saúde: `GET /health`
+  - Retorna um JSON simples com status do serviço.
+
+### Microsserviço B (service_b)
+- Exposto na porta interna 5000 e mapeado para `localhost:5001`.
+- Endpoint principal: `GET /relatorio`
+  - Consome `GET /users` do microsserviço A.
+  - Monta frases no formato: `"Usuário X ativo desde Y."`.
+  - Retorna um JSON com:
+    - `quantidade_usuarios`
+    - `frases` (lista de strings)
+    - `origem` (texto explicativo).
+- Endpoint de saúde: `GET /health`
+  - Mostra status do serviço B e a URL configurada para o serviço A.
+
+### Docker e Comunicação
+- Cada microsserviço possui seu próprio `Dockerfile`.
+- A comunicação entre eles é feita via HTTP, usando o nome do serviço (`service_a`) como host.
+- O arquivo `docker-compose.yml` orquestra a subida dos dois serviços na mesma rede interna `micros_net`.
+
+---
+
+## ◈ Como Executar
+
+Dentro da pasta `desafio4`:
+
+### 1. Subir os serviços com Docker Compose:
+```bash
+docker compose up --build
+```
+*Isso irá:*
+- *Construir as imagens de service_a e service_b.*
+- *Criar a rede interna micros_net.*
+- *Subir os dois containers já conectados.*
+
+### 2. Testar o Microsserviço A:
+```bash
+curl http://localhost:5000/users
+```
+
+### 3. Testar o Microsserviço B (consumindo A):
+```bash
+curl http://localhost:5001/relatorio
+```
+*Isso comprova que:*
+- *O microsserviço B está chamando o A via HTTP.*
+- *A comunicação entre microsserviços está funcionando na rede interna.*
+
+---
+
+## ◈ Arquitetura e Endpoints
+
+- Rede interna: `micros_net`.
+- Serviços:
+  - `service_a`: serve JSON com usuários.
+  - `service_b`: consome `service_a` e monta um relatório.
+- Principais endpoints:
+  - `service_a`: `GET /users`, `GET /health`.
+  - `service_b`: `GET /relatorio`, `GET /health`.
+
+---
+
+## ◈ Critérios atendidos
+
+| **Critério**                                | **Como foi atendido**                                                  |
+| ------------------------------------------- | ---------------------------------------------------------------------- |
+| Comunicação entre microsserviços            | B consome A via HTTP (requisição para `http://service_a:5000/users`) ✔ |
+| Dockerfiles e isolamento corretos           | Cada serviço tem seu próprio Dockerfile e imagem independente ✔        |
+| Explicação clara da arquitetura e endpoints | README detalha serviços, endpoints e fluxo de comunicação ✔            |
+| Clareza e originalidade da implementação    | Relatório com frases em português usando dados do microsserviço A ✔    |
 </details>
