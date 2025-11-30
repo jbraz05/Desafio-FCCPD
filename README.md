@@ -1,4 +1,4 @@
-Antes de executar qualquer um dos desafios, certifique-se de que está na pasta correspondente. Caso não esteja, use o comando `cd desafioN`, sendo N o número do desafio a ser testado.
+Antes de executar qualquer um dos desafios, certifique-se de que está na pasta correspondente. Caso não esteja, use o comando `cd desafioN` no terminal, sendo N o número do desafio a ser testado.
 
 <details>
 <summary><h2>⓵ Primeiro Desafio: Containers em Rede</h2></summary>
