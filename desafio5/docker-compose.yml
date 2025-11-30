@@ -1,0 +1,35 @@
+version: "3.9"
+
+services:
+  users_service:
+    build: ./users_service
+    container_name: users_service
+    ports:
+      - "6000:6000"
+    networks:
+      - apinet
+
+  orders_service:
+    build: ./orders_service
+    container_name: orders_service
+    ports:
+      - "7000:7000"
+    networks:
+      - apinet
+
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "8000:8000"
+    environment:
+      USERS_URL: http://users_service:6000/users
+      ORDERS_URL: http://orders_service:7000/orders
+    depends_on:
+      - users_service
+      - orders_service
+    networks:
+      - apinet
+
+networks:
+  apinet:
