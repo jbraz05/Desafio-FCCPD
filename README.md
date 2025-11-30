@@ -1,3 +1,5 @@
+Antes de executar qualquer um dos desafios, certifique-se de que está na pasta correspondente. Caso não esteja, use o comando `cd desafioN`, sendo N o número do desafio a ser testado.
+
 <details>
 <summary><h2>⓵ Primeiro Desafio: Containers em Rede</h2></summary>
 
@@ -238,8 +240,6 @@ Criar dois microsserviços independentes que se comunicam via HTTP, cada um com 
 
 ## ◈ Como Executar
 
-Dentro da pasta `desafio4`:
-
 ### 1. Subir os serviços com Docker Compose:
 ```bash
 docker compose up --build
@@ -284,4 +284,78 @@ curl http://localhost:5001/relatorio
 | Dockerfiles e isolamento corretos           | Cada serviço tem seu próprio Dockerfile e imagem independente ✔        |
 | Explicação clara da arquitetura e endpoints | README detalha serviços, endpoints e fluxo de comunicação ✔            |
 | Clareza e originalidade da implementação    | Relatório com frases em português usando dados do microsserviço A ✔    |
+</details>
+
+<details>
+<summary><h2>⓹ Quinto Desafio: Microsserviços com API Gateway</h2></summary>
+
+## ◈ Objetivo
+Criar uma arquitetura com três serviços independentes:
+- Microsserviço de usuários
+- Microsserviço de pedidos
+- API Gateway centralizando o acesso
+
+Cada serviço deve rodar em seu próprio container e se comunicar via HTTP.
+
+---
+
+## ◈ Componentes do Projeto
+
+### Microsserviço de Usuários (`users_service`)
+- Porta interna 6000.
+- Endpoint principal: `GET /users`
+  - Retorna uma lista de usuários em JSON.
+- Endpoint de saúde: `GET /health`.
+
+### Microsserviço de Pedidos (`orders_service`)
+- Porta interna 7000.
+- Endpoint principal: `GET /orders`
+  - Retorna pedidos vinculados aos usuários.
+- Endpoint de saúde: `GET /health`.
+
+### API Gateway (`gateway`)
+- Porta exposta: 8000.
+- Endpoints:
+  - `GET /users` → chama o users_service
+  - `GET /orders` → chama o orders_service
+- Centraliza o acesso a ambos os serviços.
+- Configurado via variáveis de ambiente:
+  - `USERS_URL`
+  - `ORDERS_URL`
+
+---
+
+## ◈ Como Executar
+
+### 1. Subir tudo:
+```bash
+docker compose up --build
+```
+
+### 2. Testar o microsserviço de usuários:
+```bash
+curl http://localhost:6000/users
+```
+
+### 3. Testar o microsserviço de pedidos:
+```bash
+curl http://localhost:7000/orders
+```
+
+### 4. Testar o Gateway:
+```bash
+curl http://localhost:8000/users
+curl http://localhost:8000/orders
+```
+
+---
+
+## ◈ Critérios atendidos
+
+| **Critério**                      | **Como foi atendido**                                        |
+| --------------------------------- | ------------------------------------------------------------ |
+| Funcionamento do gateway          | Gateway expõe `/users` e `/orders` centralizando acesso ✔    |
+| Integração correta entre serviços | Gateway consulta users_service e orders_service via HTTP ✔   |
+| README detalhado                  | Explicação da arquitetura, endpoints e testes incluídos ✔    |
+| Clareza e boa organização         | Código separado por serviços, Dockerfiles limpos e Compose ✔ |
 </details>
